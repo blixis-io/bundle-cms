@@ -1,0 +1,19 @@
+{
+  "name": "@blixis-io/create-cms",
+  "version": "0.0.0",
+  "description": "Scaffold a Blixis CMS project",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/blixis-io/bundle-cms.git", "directory": "packages/create-cms" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "bin": { "create-cms": "./dist/cli.js" },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@blixis-io/cms-dev-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "pnpm run build && node --env-file=.env --watch dist/main.js",
+    "start": "node --env-file=.env dist/main.js",
+    "prepare:cms": "node --env-file=.env dist/prepare.js"
+  },
+  "dependencies": { "@blixis-io/cms-api": "workspace:*" },
+  "devDependencies": { "@types/node": "^24.0.0", "typescript": "^7.0.2" }
+}
