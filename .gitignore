@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+.astro/
+.env
+.env.*
+!.env.example
+*.tgz
+.DS_Store

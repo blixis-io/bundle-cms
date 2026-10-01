@@ -1,0 +1,48 @@
+name: Publish one CMS package
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to publish after its npm trusted publisher is configured
+        required: true
+        type: choice
+        options:
+          - cms-api
+          - create-cms
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: cms
+          POSTGRES_PASSWORD: cms_test
+          POSTGRES_DB: cms
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U cms -d cms"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      CMS_TEST_DATABASE_URL: postgres://cms:cms_test@localhost:5432/cms
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run ci
+      - run: pnpm run smoke:packed
+      - run: node -e "const p = require('./package.json'); if (p.version === '0.0.0') throw new Error('Run Changesets versioning before publishing')"
+        working-directory: packages/${{ inputs.package }}
+      - run: npm publish
+        working-directory: packages/${{ inputs.package }}

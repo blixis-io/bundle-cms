@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import", "promise", "node", "vitest"],
+  "categories": { "correctness": "error", "suspicious": "error", "perf": "warn", "style": "off" },
+  "rules": {
+    "import/no-cycle": "error",
+    "typescript/no-extraneous-class": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-imports": ["error", {
+      "patterns": [
+        { "regex": "^@blixis-io/cms-[^/]+/", "message": "Import another CMS package through its public root entrypoint." },
+        { "regex": "^\\.\\./(?:\\.\\./)*cms-[^/]+/", "message": "Use the other CMS package's public root entrypoint." }
+      ]
+    }],
+    "typescript/no-floating-promises": "error"
+  },
+  "overrides": [{ "files": ["**/*.test.ts"], "rules": { "typescript/no-unsafe-type-assertion": "off" } }],
+  "ignorePatterns": ["dist", "coverage", "node_modules", ".astro", ".turbo"]
+}
